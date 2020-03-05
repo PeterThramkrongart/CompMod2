@@ -41,8 +41,8 @@ p_grid <- seq( from=0 , to=1 , length.out=1000 )
 prior <- rep( 1 , 1000 )
 prior2 <- rep( 1 , dens ) # Flat
 prior3 <- ifelse(p_grid < 0.5 , 0 , 1) # UnreasonablyOptimisticPrior
-prior3 <- dnorm(p_grid, 0.5, 0.1) # SensiblyCenteredAtChance
-
+prior4 <- dnorm(p_grid, 0.5, 0.1) # SensiblyCenteredAtChance
+priorUniform <- ifelse(p_grid < 0.5 , 0 , 1)
 
 dens(rbinom(1e4, 6, runif(1e4, 0, 1)))
 
@@ -60,22 +60,24 @@ plot( samples )
 
 dens( samples )
 
-quadRiccardo <- map(
-alist(
-w ~ dbinom(6,p) , # binomial likelihood
-p ~ dunif(0,1) # uniform prior
-) ,
-data=list(w=3) )
-# display summary of quadratic approximation
-precis( quadRiccardo ) #mean = 0.5 sd= 0.2
+#there is some error in this
 
-sd(samples)
+# quadRiccardo <- map(
+# alist(
+# w ~ dbinom(6,p) , # binomial likelihood
+# p ~ dunif(0,1) # uniform prior
+# ) ,data=list(w=3) )
+
+# display summary of quadratic approximation
+#precis( quadRiccardo ) #mean = 0.5 sd= 0.2
+
+#sd(samples)
 # analytical calculation 2.7
-rightAnswers <- 3
-questions <- 6
-curve( dbeta( x , rightAnswers+1 , questions-rightAnswers+1 ) , from=0 , to=1 )
-# quadratic approximation
-curve( dnorm( x , 0.5	 , 0.16 ) , lty=2 , add=TRUE )#same mean
+# rightAnswers <- 3
+# questions <- 6
+# curve( dbeta( x , rightAnswers+1 , questions-rightAnswers+1 ) , from=0 , to=1 )
+# # quadratic approximation
+# curve( dnorm( x , 0.5	 , 0.16 ) , lty=2 , add=TRUE )#same mean
 
 ```
 
@@ -90,8 +92,21 @@ curve( dnorm( x , 0.5	 , 0.16 ) , lty=2 , add=TRUE )#same mean
 # - Kristian: 2 correct answers out of 2 questions (then he gets bored)
 # - Josh: 160 correct answers out of 198 questions (Josh never gets bored)
 # - Mikkel: 66 correct answers out of 132 questions
-
+ 
 ```{r}
+
+likelihoodRiccardo <- dbinom( 3 , size=6 , prob=p_grid )
+posteriorRiccardo <- likelihoodRiccardo * prior2
+posteriorRiccardo <- posteriorRiccardo/sum(posteriorRiccardo)
+
+samplesRiccardo <- sample( p_grid , prob=posteriorRiccardo , size=1e4 , replace=TRUE )
+
+plot( samplesRiccardo )
+
+dens( samplesRiccardo )
+
+p_grid[which.max(posteriorRiccardo)]
+HPDI(samplesRiccardo,prob=0.5)
 
 likelihoodKristian <- dbinom( 2 , size=2 , prob=p_grid )
 posteriorKristian <- likelihoodKristian * prior2
@@ -103,6 +118,8 @@ plot( samplesKristian )
 
 dens( samplesKristian )#Kristian is best
 
+p_grid[which.max(posteriorKristian)]
+HPDI(samplesKristian,prob=0.5)
 
 likelihoodJosh <- dbinom( 160 , size=198 , prob=p_grid )
 posteriorJosh <- likelihoodJosh * prior2
@@ -114,6 +131,8 @@ plot( samplesJosh )
 
 dens( samplesJosh )
 
+p_grid[which.max(posteriorJosh)]
+HPDI(samplesJosh,prob=0.5)
 
 likelihoodMikkel <- dbinom( 66 , size=132 , prob=p_grid )
 posteriorMikkel <- likelihoodMikkel * prior2
@@ -123,7 +142,10 @@ samplesMikkel <- sample( p_grid , prob=posteriorMikkel , size=1e4 , replace=TRUE
 
 plot( samplesMikkel )
 
-dens( samplesMikkel )#looks similar to Riccardo
+dens( samplesMikkel )#looks similar to Kristian
+
+p_grid[which.max(posteriorMikkel)]
+HPDI(samplesMikkel,prob=0.5)
 
 ```
 
@@ -135,6 +157,19 @@ dens( samplesMikkel )#looks similar to Riccardo
 
 priorSmart<- dnorm(p_grid, 0.8, 0.2) 
 
+likelihoodRiccardoSmart <- dbinom( 3 , size=6 , prob=p_grid )
+posteriorRiccardoSmart <- likelihoodRiccardoSmart * priorSmart
+posteriorRiccardoSmart <- posteriorRiccardoSmart/sum(posteriorRiccardoSmart)
+
+samplesRiccardoSmart <- sample( p_grid , prob=posteriorRiccardoSmart , size=1e4 , replace=TRUE )
+
+plot( samplesRiccardoSmart )
+
+dens( samplesRiccardoSmart )
+
+p_grid[which.max(posteriorRiccardoSmart)]
+HPDI(samplesRiccardoSmart,prob=0.5)
+
 likelihoodKristianSmart <- dbinom( 2 , size=2 , prob=p_grid )
 posteriorKristianSmart <- likelihoodKristianSmart * priorSmart
 posteriorKristianSmart <- posteriorKristianSmart/sum(posteriorKristianSmart)
@@ -145,6 +180,8 @@ plot( samplesKristianSmart )
 
 dens( samplesKristianSmart )#Kristian is best
 
+p_grid[which.max(posteriorKristianSmart)]
+HPDI(samplesKristianSmart,prob=0.5)
 
 likelihoodJoshSmart <- dbinom( 160 , size=198 , prob=p_grid )
 posteriorJoshSmart <- likelihoodJoshSmart * priorSmart
@@ -156,6 +193,8 @@ plot( samplesJoshSmart )
 
 dens( samplesJoshSmart )
 
+p_grid[which.max(posteriorJoshSmart)]
+HPDI(samplesJoshSmart,prob=0.5)
 
 likelihoodMikkelSmart <- dbinom( 66 , size=132 , prob=p_grid )
 posteriorMikkelSmart <- likelihoodMikkelSmart * priorSmart
@@ -167,10 +206,122 @@ plot( samplesMikkelSmart )
 
 dens( samplesMikkelSmart )#looks similar to Riccardo
 
+p_grid[which.max(posteriorMikkelSmart)]
+HPDI(samplesMikkelSmart,prob=0.5)
+
 ```
 
 
 4. You go back to your teachers and collect more data (multiply the previous numbers by 100). Calculate their knowledge with both a uniform prior and a normal prior with a mean of 0.8 and a standard deviation of 0.2. Do you still see a difference between the results? Why?
+
+```{r, question 4}
+
+likelihoodRiccardoMore <- dbinom( 300 , size=600 , prob=p_grid )
+posteriorRiccardoMore <- likelihoodRiccardoMore * priorSmart
+posteriorRiccardoMore <- posteriorRiccardoMore/sum(posteriorRiccardoMore)
+
+samplesRiccardoMore <- sample( p_grid , prob=posteriorRiccardoMore , size=1e4 , replace=TRUE )
+
+plot( samplesRiccardoMore )
+
+dens( samplesRiccardoMore )
+
+p_grid[which.max(posteriorRiccardoMore)]
+HPDI(samplesRiccardoMore,prob=0.5)
+
+posteriorRiccardoMoreUniform <- likelihoodRiccardoMore * priorUniform
+posteriorRiccardoMoreUniform <- posteriorRiccardoMoreUniform/sum(posteriorRiccardoMoreUniform)
+
+samplesRiccardoMoreUniform <- sample( p_grid , prob=posteriorRiccardoMoreUniform , size=1e4 , replace=TRUE )
+
+plot( samplesRiccardoMoreUniform )
+
+dens( samplesRiccardoMoreUniform )
+
+p_grid[which.max(posteriorRiccardoUniform)]
+HPDI(samplesRiccardoMoreUniform,prob=0.5)
+
+likelihoodKristianMore <- dbinom( 200 , size=200 , prob=p_grid )
+
+
+posteriorKristianMore <- likelihoodKristianMore * priorSmart
+posteriorKristianMore <- posteriorKristianMore/sum(posteriorKristianMore)
+
+
+posteriorKristianMoreUniform <- likelihoodKristianMore * priorUniform
+posteriorKristianMoreUniform <- posteriorKristianMoreUniform/sum(posteriorKristianMoreUniform)
+
+samplesKristianMore <- sample( p_grid , prob=posteriorKristianMore , size=1e4 , replace=TRUE )
+
+samplesKristianMoreUniform <- sample( p_grid , prob=posteriorKristianMoreUniform , size=1e4 , replace=TRUE )
+
+plot( samplesKristianMore )
+
+dens( samplesKristianMore )#Kristian is best
+
+p_grid[which.max(posteriorKristianMore)]
+HPDI(samplesKristianMore,prob=0.5)
+
+plot( samplesKristianMoreUniform )
+
+dens( samplesKristianMoreUniform )#Kristian is best
+
+p_grid[which.max(posteriorKristianUniform)]
+HPDI(samplesKristianUniform,prob=0.5)
+
+likelihoodJoshMore <- dbinom( 16000 , size=19800 , prob=p_grid )
+posteriorJoshMore <- likelihoodJoshMore * priorSmart
+posteriorJoshMore <- posteriorJoshMore/sum(posteriorJoshMore)
+
+samplesJoshMore <- sample( p_grid , prob=posteriorJoshMore , size=1e4 , replace=TRUE )
+
+plot( samplesJoshMore )
+
+dens( samplesJoshMore )
+
+p_grid[which.max(posteriorJoshMore)]
+HPDI(samplesJoshMore,prob=0.5)
+
+posteriorJoshMoreUniform <- likelihoodJoshMore* priorUniform
+posteriorJoshMoreUniform <- posteriorJoshMoreUniform/sum(posteriorJoshMoreUniform)
+
+samplesJoshMoreUniform <- sample( p_grid , prob=posteriorJoshMoreUniform , size=1e4 , replace=TRUE )
+
+plot( samplesJoshMoreUniform )
+
+dens( samplesJoshMoreUniform )
+
+p_grid[which.max(posteriorJoshUniform)]
+HPDI(samplesJoshUniform,prob=0.5)
+
+likelihoodMikkelMore <- dbinom( 6600 , size=13200 , prob=p_grid )
+posteriorMikkelMore <- likelihoodMikkelMore * priorSmart
+posteriorMikkelMore <- posteriorMikkelMore/sum(posteriorMikkelMore)
+
+samplesMikkelMore <- sample( p_grid , prob=posteriorMikkelMore , size=1e4 , replace=TRUE )
+
+plot( samplesMikkelMore )
+
+dens( samplesMikkelMore )#looks similar to Riccardo
+
+p_grid[which.max(posteriorMikkelMore)]
+HPDI(samplesMikkelMore,prob=0.5)
+
+posteriorMikkelMoreUniform <- likelihoodMikkelMore* priorUniform
+posteriorMikkelMoreUniform <- posteriorMikkelMoreUniform/sum(posteriorMikkelMoreUniform)
+
+samplesMikkelMoreUniform <- sample( p_grid , prob=posteriorMikkelMoreUniform , size=1e4 , replace=TRUE )
+
+plot( samplesMikkelMoreUniform )
+
+dens( samplesMikkelMoreUniform )#looks similar to Riccardo
+
+p_grid[which.max(posteriorMikkelMoreUniform)]
+HPDI(samplesMikkelMoreUniform,prob=0.5)
+
+
+```
+
 
 5. Imagine you're a skeptic and think your teachers do not know anything about CogSci, given the content of their classes. How would you operationalize that belief?
 
