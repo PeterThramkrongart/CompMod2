@@ -336,13 +336,13 @@ kris4_stan <- calc_teacher_knowledge(200, 200, stan_prior)
 
 
 ## Josh
-josh4_uni <- calc_teacher_knowledge (1600, 1980, uni_prior)
-josh4_stan <- calc_teacher_knowledge(1600, 1980, stan_prior)
+josh4_uni <- calc_teacher_knowledge (16000, 19800, uni_prior)
+josh4_stan <- calc_teacher_knowledge(16000, 19800, stan_prior)
 
 
 ## Mikkel
-mik4_uni <- calc_teacher_knowledge (666, 1320, uni_prior)
-mik4_stan <- calc_teacher_knowledge(666, 1320, stan_prior)
+mik4_uni <- calc_teacher_knowledge (6600, 13200, uni_prior)
+mik4_stan <- calc_teacher_knowledge(6600, 13200, stan_prior)
 
 #summary stats with uniform priors
 summary_stats(ric4_uni)
@@ -367,18 +367,18 @@ summary_stats(josh4_uni)
 ```
 
     ##      |0.8      0.8| 
-    ## 0.7967968 0.8188188 
+    ## 0.8058058 0.8128128 
     ## [1] 0.8078078
-    ## [1] 0.008949287
+    ## [1] 0.00282995
 
 ``` r
 summary_stats(mik4_uni)
 ```
 
     ##      |0.8      0.8| 
-    ## 0.4874875 0.5225225 
-    ## [1] 0.5045045
-    ## [1] 0.01388945
+    ## 0.4934935 0.5045045 
+    ## [1] 0.4994995
+    ## [1] 0.004398021
 
 ``` r
 #summary stats with an informed prior
@@ -404,18 +404,18 @@ summary_stats(josh4_stan)
 ```
 
     ##      |0.8      0.8| 
-    ## 0.7967968 0.8188188 
+    ## 0.8058058 0.8128128 
     ## [1] 0.8078078
-    ## [1] 0.008870406
+    ## [1] 0.002808291
 
 ``` r
 summary_stats(mik4_stan)
 ```
 
     ##      |0.8      0.8| 
-    ## 0.4894895 0.5245245 
-    ## [1] 0.5055055
-    ## [1] 0.01395565
+    ## 0.4934935 0.5045045 
+    ## [1] 0.5005005
+    ## [1] 0.004433293
 
 ``` r
 ## Riccardo

@@ -218,13 +218,13 @@ kris4_stan <- calc_teacher_knowledge(200, 200, stan_prior)
 
 
 ## Josh
-josh4_uni <- calc_teacher_knowledge (1600, 1980, uni_prior)
-josh4_stan <- calc_teacher_knowledge(1600, 1980, stan_prior)
+josh4_uni <- calc_teacher_knowledge (16000, 19800, uni_prior)
+josh4_stan <- calc_teacher_knowledge(16000, 19800, stan_prior)
 
 
 ## Mikkel
-mik4_uni <- calc_teacher_knowledge (666, 1320, uni_prior)
-mik4_stan <- calc_teacher_knowledge(666, 1320, stan_prior)
+mik4_uni <- calc_teacher_knowledge (6600, 13200, uni_prior)
+mik4_stan <- calc_teacher_knowledge(6600, 13200, stan_prior)
 
 #summary stats with uniform priors
 summary_stats(ric4_uni)
