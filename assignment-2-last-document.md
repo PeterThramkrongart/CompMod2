@@ -417,6 +417,61 @@ summary_stats(mik4_stan)
     ## [1] 0.5055055
     ## [1] 0.01395565
 
+``` r
+## Riccardo
+ric4_stan_plot <-
+  pretty_plot(p_grid, stan_prior, ric4_stan$teacher_posterior, title = "Riccardo's estimated knowledge")
+
+
+## Kristian
+
+kris4_stan_plot <-
+  pretty_plot(p_grid, stan_prior, kris4_stan$teacher_posterior, title = "Kristian's estimated knowledge")
+
+## Josh
+
+josh4_stan_plot <-
+  pretty_plot(p_grid, stan_prior, josh4_stan$teacher_posterior, title = "Josh's estimated knowledge")
+
+## Mikkel
+
+mik4_stan_plot <-
+  pretty_plot(p_grid, stan_prior, mik4_stan$teacher_posterior, title = "Mikkel's estimated knowledge")
+
+## plotting
+grid.arrange(ric4_stan_plot, kris4_stan_plot,josh4_stan_plot, mik4_stan_plot, nrow=2, top = "with 100 times more data and informed priors")
+```
+
+![](assignment-2-last-document_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+``` r
+#Riccardo
+ric4_uni_plot <-
+  pretty_plot(p_grid, stan_prior, ric4_uni$teacher_posterior, title = "Riccardo's estimated knowledge")
+
+
+## Kristian
+
+kris4_uni_plot <-
+  pretty_plot(p_grid, stan_prior, kris4_uni$teacher_posterior, title = "Kristian's estimated knowledge")
+
+## Josh
+
+josh4_uni_plot <-
+  pretty_plot(p_grid, stan_prior, josh4_uni$teacher_posterior, title = "Josh's estimated knowledge")
+
+## Mikkel
+
+mik4_uni_plot <-
+  pretty_plot(p_grid, stan_prior, mik4_uni$teacher_posterior, title = "Mikkel's estimated knowledge")
+
+## plotting
+## plotting
+grid.arrange(ric4_uni_plot, kris4_uni_plot,josh4_uni_plot, mik4_uni_plot, nrow = 2, top = "With 100 times more data and uniform priors") 
+```
+
+![](assignment-2-last-document_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
+
 ## Question 5
 
 5.  Imagine you’re a skeptic and think your teachers do not know
