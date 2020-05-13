@@ -44,6 +44,10 @@ library("rstan")
 
 pacman::p_load(rethinking, ggplot2, dplyr, tidyverse, tidyr, gridExtra, tidybayes)
 
+#set seed for consistency
+
+set.seed(69)
+
 ### Riccardo's estimated knowledge
 
 ##grid aproximation##
